@@ -53,7 +53,7 @@ public class JobPortal {
             }
 
         } catch (NumberFormatException e) {
-            // Search by job name if input is not a number
+            // Search by job name
         }
 
         for (Job job : jobs) {
@@ -82,11 +82,18 @@ public class JobPortal {
         return match;
     }
 
+    // Method to calculate matching percentage
+    public static int calculateMatchPercentage(int matchingSkills) {
+
+        int totalSkills = 2;
+
+        return (matchingSkills * 100) / totalSkills;
+    }
+
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
 
-        // Create job objects with descriptions
         Job[] jobs = {
 
             new Job("Java Developer", "Java", "SQL",
@@ -111,10 +118,10 @@ public class JobPortal {
 
         if (selectedJob != null) {
 
-            // Count matching skills using separate method
             int match = countMatchingSkills(candidate, selectedJob);
 
-            int percentage = match * 50;
+            // Calculate percentage using separate method
+            int percentage = calculateMatchPercentage(match);
 
             System.out.println("\n================================");
             System.out.println("       APPLICATION DETAILS");
