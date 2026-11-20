@@ -1,11 +1,15 @@
+
 import java.util.Scanner;
+
 public class JobPortal {
-   // Method to display all available jobs
+
+    // Method to display all available jobs
     public static void displayJobs(Job[] jobs) {
 
         System.out.println("\nAvailable Job Postings:");
 
         for (int i = 0; i < jobs.length; i++) {
+
             System.out.println("\nJob " + (i + 1));
             jobs[i].displayJobRequirements();
         }
@@ -41,11 +45,17 @@ public class JobPortal {
 
         Scanner sc = new Scanner(System.in);
 
-        // Create job objects
+        // Create job objects with descriptions
         Job[] jobs = {
-            new Job("Java Developer", "Java", "SQL"),
-            new Job("Python Developer", "Python", "Machine Learning"),
-            new Job("Web Developer", "HTML", "CSS")
+
+            new Job("Java Developer", "Java", "SQL",
+                    "Develop and maintain Java-based applications."),
+
+            new Job("Python Developer", "Python", "Machine Learning",
+                    "Build Python applications and machine learning models."),
+
+            new Job("Web Developer", "HTML", "CSS",
+                    "Design and develop attractive websites.")
         };
 
         System.out.println("================================");
@@ -66,7 +76,7 @@ public class JobPortal {
 
             int match = 0;
 
-            // Check candidate skills using hasSkill() method
+            // Check candidate skills
             if (candidate.hasSkill(jobs[choice - 1].skill1)) {
                 match++;
             }
@@ -85,7 +95,11 @@ public class JobPortal {
 
             candidate.displayCandidate();
 
-            System.out.println("Selected Job: " + jobs[choice - 1].jobName);
+            System.out.println("Selected Job: "
+                    + jobs[choice - 1].jobName);
+
+            System.out.println("Job Description: "
+                    + jobs[choice - 1].description);
 
             System.out.println("Required Skills: "
                     + jobs[choice - 1].skill1 + ", "
@@ -95,11 +109,13 @@ public class JobPortal {
 
             System.out.println("Match Percentage: " + percentage + "%");
 
-            // Display application status
+            // Application status
             if (percentage >= 50) {
-                System.out.println("Application Status: Applied Successfully");
+                System.out.println(
+                        "Application Status: Applied Successfully");
             } else {
-                System.out.println("Application Status: Low Skill Match");
+                System.out.println(
+                        "Application Status: Low Skill Match");
             }
 
         } else {
