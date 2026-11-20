@@ -90,6 +90,48 @@ public class JobPortal {
         return (matchingSkills * 100) / totalSkills;
     }
 
+    // Method to display matched and missing skills
+    public static void displaySkillDetails(Candidate candidate, Job job) {
+
+        System.out.println("\n--- SKILL MATCHING DETAILS ---");
+
+        System.out.println("Matched Skills:");
+
+        boolean hasMatch = false;
+
+        if (candidate.hasSkill(job.skill1)) {
+            System.out.println("- " + job.skill1);
+            hasMatch = true;
+        }
+
+        if (candidate.hasSkill(job.skill2)) {
+            System.out.println("- " + job.skill2);
+            hasMatch = true;
+        }
+
+        if (!hasMatch) {
+            System.out.println("No matching skills found.");
+        }
+
+        System.out.println("\nMissing Skills:");
+
+        boolean hasMissing = false;
+
+        if (!candidate.hasSkill(job.skill1)) {
+            System.out.println("- " + job.skill1);
+            hasMissing = true;
+        }
+
+        if (!candidate.hasSkill(job.skill2)) {
+            System.out.println("- " + job.skill2);
+            hasMissing = true;
+        }
+
+        if (!hasMissing) {
+            System.out.println("No missing skills!");
+        }
+    }
+
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
@@ -120,7 +162,6 @@ public class JobPortal {
 
             int match = countMatchingSkills(candidate, selectedJob);
 
-            // Calculate percentage using separate method
             int percentage = calculateMatchPercentage(match);
 
             System.out.println("\n================================");
@@ -138,7 +179,9 @@ public class JobPortal {
                     + selectedJob.skill1 + ", "
                     + selectedJob.skill2);
 
-            System.out.println("Matching Skills: " + match + "/2");
+            displaySkillDetails(candidate, selectedJob);
+
+            System.out.println("\nMatching Skills: " + match + "/2");
 
             System.out.println("Match Percentage: " + percentage + "%");
 
