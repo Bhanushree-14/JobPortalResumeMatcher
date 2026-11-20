@@ -9,7 +9,6 @@ public class JobPortal {
         System.out.println("\nAvailable Job Postings:");
 
         for (int i = 0; i < jobs.length; i++) {
-
             System.out.println("\nJob " + (i + 1));
             jobs[i].displayJobRequirements();
         }
@@ -32,13 +31,41 @@ public class JobPortal {
         System.out.print("Enter your second skill: ");
         String skill2 = sc.nextLine();
 
-        // Create candidate object
         Candidate candidate =
                 new Candidate(name, email, skill1, skill2);
 
         System.out.println("\nCandidate registered successfully!");
 
         return candidate;
+    }
+
+    // Method to select a job using number or name
+    public static Job selectJob(Scanner sc, Job[] jobs) {
+
+        System.out.print("\nEnter job number or job name: ");
+        String choice = sc.nextLine().trim();
+
+        // Check if the input is a job number
+        try {
+            int jobNumber = Integer.parseInt(choice);
+
+            if (jobNumber >= 1 && jobNumber <= jobs.length) {
+                return jobs[jobNumber - 1];
+            }
+
+        } catch (NumberFormatException e) {
+            // Input is not a number, so search by job name
+        }
+
+        // Search for job by name
+        for (Job job : jobs) {
+
+            if (job.jobName.equalsIgnoreCase(choice)) {
+                return job;
+            }
+        }
+
+        return null;
     }
 
     public static void main(String[] args) {
@@ -68,20 +95,19 @@ public class JobPortal {
         // Register candidate
         Candidate candidate = registerCandidate(sc);
 
-        // Job selection
-        System.out.print("\nEnter job number to apply: ");
-        int choice = sc.nextInt();
+        // Select job
+        Job selectedJob = selectJob(sc, jobs);
 
-        if (choice >= 1 && choice <= jobs.length) {
+        if (selectedJob != null) {
 
             int match = 0;
 
             // Check candidate skills
-            if (candidate.hasSkill(jobs[choice - 1].skill1)) {
+            if (candidate.hasSkill(selectedJob.skill1)) {
                 match++;
             }
 
-            if (candidate.hasSkill(jobs[choice - 1].skill2)) {
+            if (candidate.hasSkill(selectedJob.skill2)) {
                 match++;
             }
 
@@ -95,21 +121,19 @@ public class JobPortal {
 
             candidate.displayCandidate();
 
-            System.out.println("Selected Job: "
-                    + jobs[choice - 1].jobName);
+            System.out.println("Selected Job: " + selectedJob.jobName);
 
             System.out.println("Job Description: "
-                    + jobs[choice - 1].description);
+                    + selectedJob.description);
 
             System.out.println("Required Skills: "
-                    + jobs[choice - 1].skill1 + ", "
-                    + jobs[choice - 1].skill2);
+                    + selectedJob.skill1 + ", "
+                    + selectedJob.skill2);
 
             System.out.println("Matching Skills: " + match + "/2");
 
             System.out.println("Match Percentage: " + percentage + "%");
 
-            // Application status
             if (percentage >= 50) {
                 System.out.println(
                         "Application Status: Applied Successfully");
@@ -119,7 +143,8 @@ public class JobPortal {
             }
 
         } else {
-            System.out.println("Invalid Job Number!");
+            System.out.println(
+                    "Job not found! Please select a valid job.");
         }
 
         System.out.println("\nThank you for using Job Portal!");
