@@ -45,7 +45,6 @@ public class JobPortal {
         System.out.print("\nEnter job number or job name: ");
         String choice = sc.nextLine().trim();
 
-        // Check if the input is a job number
         try {
             int jobNumber = Integer.parseInt(choice);
 
@@ -54,10 +53,9 @@ public class JobPortal {
             }
 
         } catch (NumberFormatException e) {
-            // Input is not a number, so search by job name
+            // Search by job name if input is not a number
         }
 
-        // Search for job by name
         for (Job job : jobs) {
 
             if (job.jobName.equalsIgnoreCase(choice)) {
@@ -66,6 +64,22 @@ public class JobPortal {
         }
 
         return null;
+    }
+
+    // Method to count matching skills
+    public static int countMatchingSkills(Candidate candidate, Job job) {
+
+        int match = 0;
+
+        if (candidate.hasSkill(job.skill1)) {
+            match++;
+        }
+
+        if (candidate.hasSkill(job.skill2)) {
+            match++;
+        }
+
+        return match;
     }
 
     public static void main(String[] args) {
@@ -89,32 +103,19 @@ public class JobPortal {
         System.out.println("       JOB PORTAL SYSTEM");
         System.out.println("================================");
 
-        // Display available jobs
         displayJobs(jobs);
 
-        // Register candidate
         Candidate candidate = registerCandidate(sc);
 
-        // Select job
         Job selectedJob = selectJob(sc, jobs);
 
         if (selectedJob != null) {
 
-            int match = 0;
+            // Count matching skills using separate method
+            int match = countMatchingSkills(candidate, selectedJob);
 
-            // Check candidate skills
-            if (candidate.hasSkill(selectedJob.skill1)) {
-                match++;
-            }
-
-            if (candidate.hasSkill(selectedJob.skill2)) {
-                match++;
-            }
-
-            // Calculate matching percentage
             int percentage = match * 50;
 
-            // Display application details
             System.out.println("\n================================");
             System.out.println("       APPLICATION DETAILS");
             System.out.println("================================");
