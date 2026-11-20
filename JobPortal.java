@@ -10,7 +10,7 @@ public class JobPortal {
 
         for (int i = 0; i < jobs.length; i++) {
             System.out.println("\nJob " + (i + 1));
-            jobs[i].displayJob();
+           jobs[i].displayJobRequirements();
         }
     }
 
