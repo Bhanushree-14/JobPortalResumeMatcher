@@ -3,6 +3,41 @@ import java.util.Scanner;
 
 public class JobPortal {
 
+    // Method to get non-empty input
+    public static String getValidInput(Scanner sc, String message) {
+
+        String input;
+
+        do {
+            System.out.print(message);
+            input = sc.nextLine().trim();
+
+            if (input.isEmpty()) {
+                System.out.println("Input cannot be empty! Try again.");
+            }
+
+        } while (input.isEmpty());
+
+        return input;
+    }
+
+    // Method to get a valid email
+    public static String getValidEmail(Scanner sc) {
+
+        String email;
+
+        do {
+            email = getValidInput(sc, "Enter your email: ");
+
+            if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+                System.out.println("Invalid email! Please enter a valid email.");
+            }
+
+        } while (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"));
+
+        return email;
+    }
+
     // Method to display all available jobs
     public static void displayJobs(Job[] jobs) {
 
@@ -19,17 +54,13 @@ public class JobPortal {
 
         System.out.println("\n--- Candidate Registration ---");
 
-        System.out.print("Enter your name: ");
-        String name = sc.nextLine();
+        String name = getValidInput(sc, "Enter your name: ");
 
-        System.out.print("Enter your email: ");
-        String email = sc.nextLine();
+        String email = getValidEmail(sc);
 
-        System.out.print("Enter your first skill: ");
-        String skill1 = sc.nextLine();
+        String skill1 = getValidInput(sc, "Enter your first skill: ");
 
-        System.out.print("Enter your second skill: ");
-        String skill2 = sc.nextLine();
+        String skill2 = getValidInput(sc, "Enter your second skill: ");
 
         Candidate candidate =
                 new Candidate(name, email, skill1, skill2);
@@ -39,31 +70,35 @@ public class JobPortal {
         return candidate;
     }
 
-    // Method to select a job using number or name
+    // Method to select a valid job
     public static Job selectJob(Scanner sc, Job[] jobs) {
 
-        System.out.print("\nEnter job number or job name: ");
-        String choice = sc.nextLine().trim();
+        while (true) {
 
-        try {
-            int jobNumber = Integer.parseInt(choice);
+            String choice = getValidInput(
+                    sc, "\nEnter job number or job name: ");
 
-            if (jobNumber >= 1 && jobNumber <= jobs.length) {
-                return jobs[jobNumber - 1];
+            try {
+                int jobNumber = Integer.parseInt(choice);
+
+                if (jobNumber >= 1 && jobNumber <= jobs.length) {
+                    return jobs[jobNumber - 1];
+                }
+
+                System.out.println("Invalid job number! Try again.");
+
+            } catch (NumberFormatException e) {
+
+                for (Job job : jobs) {
+
+                    if (job.jobName.equalsIgnoreCase(choice)) {
+                        return job;
+                    }
+                }
+
+                System.out.println("Job not found! Please try again.");
             }
-
-        } catch (NumberFormatException e) {
-            // Search by job name
         }
-
-        for (Job job : jobs) {
-
-            if (job.jobName.equalsIgnoreCase(choice)) {
-                return job;
-            }
-        }
-
-        return null;
     }
 
     // Method to count matching skills
@@ -136,7 +171,6 @@ public class JobPortal {
 
         Scanner sc = new Scanner(System.in);
 
-        // Create job objects
         Job[] jobs = {
 
             new Job("Java Developer", "Java", "SQL",
@@ -153,69 +187,54 @@ public class JobPortal {
         System.out.println("       JOB PORTAL SYSTEM");
         System.out.println("================================");
 
-        // Display available jobs
         displayJobs(jobs);
 
-        // Register candidate
         Candidate candidate = registerCandidate(sc);
 
-        // Select job
         Job selectedJob = selectJob(sc, jobs);
 
-        if (selectedJob != null) {
+        int match = countMatchingSkills(candidate, selectedJob);
 
-            // Count matching skills
-            int match = countMatchingSkills(candidate, selectedJob);
+        int percentage = calculateMatchPercentage(match);
 
-            // Calculate matching percentage
-            int percentage = calculateMatchPercentage(match);
+        System.out.println("\n================================");
+        System.out.println("       APPLICATION DETAILS");
+        System.out.println("================================");
 
-            System.out.println("\n================================");
-            System.out.println("       APPLICATION DETAILS");
-            System.out.println("================================");
+        candidate.displayCandidate();
 
-            candidate.displayCandidate();
+        System.out.println("Selected Job: " + selectedJob.jobName);
 
-            System.out.println("Selected Job: " + selectedJob.jobName);
+        System.out.println("Job Description: "
+                + selectedJob.description);
 
-            System.out.println("Job Description: "
-                    + selectedJob.description);
+        System.out.println("Required Skills: "
+                + selectedJob.skill1 + ", "
+                + selectedJob.skill2);
 
-            System.out.println("Required Skills: "
-                    + selectedJob.skill1 + ", "
-                    + selectedJob.skill2);
+        displaySkillDetails(candidate, selectedJob);
 
-            // Display matched and missing skills
-            displaySkillDetails(candidate, selectedJob);
+        System.out.println("\nMatching Skills: " + match + "/2");
 
-            System.out.println("\nMatching Skills: " + match + "/2");
+        System.out.println("Match Percentage: " + percentage + "%");
 
-            System.out.println("Match Percentage: " + percentage + "%");
+        // Create application record
+        String status;
 
-            // Create application record
-            String status;
-
-            if (percentage >= 50) {
-                status = "Applied Successfully";
-            } else {
-                status = "Low Skill Match";
-            }
-
-            Application application = new Application(
-                    candidate.name,
-                    selectedJob.jobName,
-                    percentage,
-                    status
-            );
-
-            // Display application tracking details
-            application.displayApplication();
-
+        if (percentage >= 50) {
+            status = "Applied Successfully";
         } else {
-
-            System.out.println(
-                    "Job not found! Please select a valid job.");
+            status = "Low Skill Match";
         }
+
+        Application application = new Application(
+                candidate.name,
+                selectedJob.jobName,
+                percentage,
+                status
+        );
+
+        application.displayApplication();
 
         System.out.println("\nThank you for using Job Portal!");
 
