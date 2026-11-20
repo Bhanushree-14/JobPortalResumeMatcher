@@ -3,6 +3,18 @@ import java.util.Scanner;
 
 public class JobPortal {
 
+    // Method to display all available jobs
+    public static void displayJobs(Job[] jobs) {
+
+        System.out.println("\nAvailable Job Postings:");
+
+        for (int i = 0; i < jobs.length; i++) {
+
+            System.out.println("\nJob " + (i + 1));
+            jobs[i].displayJob();
+        }
+    }
+
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
@@ -18,14 +30,8 @@ public class JobPortal {
         System.out.println("       JOB PORTAL SYSTEM");
         System.out.println("================================");
 
-        // Display available jobs
-        System.out.println("\nAvailable Job Postings:");
-
-        for (int i = 0; i < jobs.length; i++) {
-
-            System.out.println("\nJob " + (i + 1));
-            jobs[i].displayJob();
-        }
+        // Display available jobs using the method
+        displayJobs(jobs);
 
         // Candidate registration
         System.out.println("\n--- Candidate Registration ---");
