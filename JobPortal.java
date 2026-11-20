@@ -136,6 +136,7 @@ public class JobPortal {
 
         Scanner sc = new Scanner(System.in);
 
+        // Create job objects
         Job[] jobs = {
 
             new Job("Java Developer", "Java", "SQL",
@@ -152,16 +153,21 @@ public class JobPortal {
         System.out.println("       JOB PORTAL SYSTEM");
         System.out.println("================================");
 
+        // Display available jobs
         displayJobs(jobs);
 
+        // Register candidate
         Candidate candidate = registerCandidate(sc);
 
+        // Select job
         Job selectedJob = selectJob(sc, jobs);
 
         if (selectedJob != null) {
 
+            // Count matching skills
             int match = countMatchingSkills(candidate, selectedJob);
 
+            // Calculate matching percentage
             int percentage = calculateMatchPercentage(match);
 
             System.out.println("\n================================");
@@ -179,21 +185,34 @@ public class JobPortal {
                     + selectedJob.skill1 + ", "
                     + selectedJob.skill2);
 
+            // Display matched and missing skills
             displaySkillDetails(candidate, selectedJob);
 
             System.out.println("\nMatching Skills: " + match + "/2");
 
             System.out.println("Match Percentage: " + percentage + "%");
 
+            // Create application record
+            String status;
+
             if (percentage >= 50) {
-                System.out.println(
-                        "Application Status: Applied Successfully");
+                status = "Applied Successfully";
             } else {
-                System.out.println(
-                        "Application Status: Low Skill Match");
+                status = "Low Skill Match";
             }
 
+            Application application = new Application(
+                    candidate.name,
+                    selectedJob.jobName,
+                    percentage,
+                    status
+            );
+
+            // Display application tracking details
+            application.displayApplication();
+
         } else {
+
             System.out.println(
                     "Job not found! Please select a valid job.");
         }
