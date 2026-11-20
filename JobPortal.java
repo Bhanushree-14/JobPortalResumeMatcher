@@ -14,6 +14,32 @@ public class JobPortal {
         }
     }
 
+    // Method to register a candidate
+    public static Candidate registerCandidate(Scanner sc) {
+
+        System.out.println("\n--- Candidate Registration ---");
+
+        System.out.print("Enter your name: ");
+        String name = sc.nextLine();
+
+        System.out.print("Enter your email: ");
+        String email = sc.nextLine();
+
+        System.out.print("Enter your first skill: ");
+        String skill1 = sc.nextLine();
+
+        System.out.print("Enter your second skill: ");
+        String skill2 = sc.nextLine();
+
+        // Create and return candidate object
+        Candidate candidate =
+                new Candidate(name, email, skill1, skill2);
+
+        System.out.println("\nCandidate registered successfully!");
+
+        return candidate;
+    }
+
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
@@ -31,23 +57,8 @@ public class JobPortal {
 
         displayJobs(jobs);
 
-        // Candidate registration
-        System.out.println("\n--- Candidate Registration ---");
-
-        System.out.print("Enter your name: ");
-        String name = sc.nextLine();
-
-        System.out.print("Enter your email: ");
-        String email = sc.nextLine();
-
-        System.out.print("Enter your first skill: ");
-        String skill1 = sc.nextLine();
-
-        System.out.print("Enter your second skill: ");
-        String skill2 = sc.nextLine();
-
-        // Create candidate object
-        Candidate candidate = new Candidate(name, email, skill1, skill2);
+        // Register candidate using method
+        Candidate candidate = registerCandidate(sc);
 
         // Job selection
         System.out.print("\nEnter job number to apply: ");
@@ -57,11 +68,13 @@ public class JobPortal {
 
             int match = 0;
 
+            // Check first required skill
             if (candidate.skill1.equalsIgnoreCase(jobs[choice - 1].skill1)
                     || candidate.skill2.equalsIgnoreCase(jobs[choice - 1].skill1)) {
                 match++;
             }
 
+            // Check second required skill
             if (candidate.skill1.equalsIgnoreCase(jobs[choice - 1].skill2)
                     || candidate.skill2.equalsIgnoreCase(jobs[choice - 1].skill2)) {
                 match++;
@@ -73,7 +86,6 @@ public class JobPortal {
             System.out.println("       APPLICATION DETAILS");
             System.out.println("================================");
 
-            // Display candidate details
             candidate.displayCandidate();
 
             System.out.println("Selected Job: " + jobs[choice - 1].jobName);
